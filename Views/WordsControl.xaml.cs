@@ -1,11 +1,11 @@
 ﻿namespace WordlieSolver.Views
 {
     /// <summary>
-    /// Interaction logic for WordlieControl.xaml
+    /// Interaction logic for WordsControl.xaml
     /// </summary>
-    public partial class WordlieControl
+    public partial class WordsControl
     {
-        public WordlieControl()
+        public WordsControl()
         {
             InitializeComponent();
         }

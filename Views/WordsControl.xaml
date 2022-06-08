@@ -1,14 +1,14 @@
-﻿<UserControl x:Class="WordlieSolver.Views.WordlieControl"
+﻿<UserControl x:Class="WordlieSolver.Views.WordsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:WordlieSolver.ViewModels"
-             mc:Ignorable="d" >
+             mc:Ignorable="d">
     <UserControl.DataContext>
-        <viewModels:WordlieViewModel/>
+        <viewModels:WordsViewModel/>
     </UserControl.DataContext>
-    <Grid Background="Green">
+    <Grid Background="Red">
             
     </Grid>
 </UserControl>
