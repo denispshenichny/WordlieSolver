@@ -8,7 +8,46 @@
     <UserControl.DataContext>
         <viewModels:WordlieViewModel/>
     </UserControl.DataContext>
-    <Grid Background="Green">
-            
+    <Grid>
+        <ItemsControl ItemsSource="{Binding Words}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="viewModels:WordViewModel">
+                    <ItemsControl ItemsSource="{Binding Letters}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="viewModels:LetterViewModel">
+                                <Button>
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Border x:Name="border"
+                                                    Width="72" 
+                                                    Height="72" 
+                                                    BorderBrush="Red" 
+                                                    BorderThickness="2" 
+                                                    CornerRadius="36"
+                                                    Margin="2">
+                                                <TextBlock Text="{Binding Character}"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="48"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                                    <Setter TargetName="border" Property="BorderBrush" Value="Green"/>
+                                                </DataTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>
