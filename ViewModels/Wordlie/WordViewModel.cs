@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace WordlieSolver.ViewModels.Wordlie
@@ -14,15 +16,23 @@ namespace WordlieSolver.ViewModels.Wordlie
                 letters.Add(new LetterViewModel());
 
             Letters = letters;
+
+            ReplyCommand = new DelegateCommand(OnReply, () => IsActive)
+                .ObservesCanExecute(() => IsActive);
         }
 
         public ObservableCollection<LetterViewModel> Letters { get; }
-
         public bool IsActive
         {
             get => _isActive;
-            private set => SetProperty(ref _isActive, value);
+            private set
+            {
+                if (SetProperty(ref _isActive, value))
+                    foreach (LetterViewModel letter in Letters)
+                        letter.IsActive = value;
+            } 
         }
+        public ICommand ReplyCommand { get; }
 
         public void SetWord(string word)
         {
@@ -30,6 +40,11 @@ namespace WordlieSolver.ViewModels.Wordlie
                 Letters[i].Character = word[i];
 
             IsActive = true;
+        }
+
+        private void OnReply()
+        {
+            IsActive = false;
         }
     }
 }

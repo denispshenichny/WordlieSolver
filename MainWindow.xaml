@@ -12,7 +12,7 @@
         MinHeight="400" MinWidth="600">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="404"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5,5,2.5,5" Padding="5">
