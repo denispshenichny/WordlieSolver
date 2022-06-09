@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Prism.Mvvm;
 
-namespace WordlieSolver.ViewModels
+namespace WordlieSolver.ViewModels.Wordlie
 {
     public class WordlieViewModel : BindableBase
     {
