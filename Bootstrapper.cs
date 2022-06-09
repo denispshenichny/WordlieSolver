@@ -3,6 +3,8 @@ using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Unity;
 using WordlieSolver.ViewModels;
+using WordlieSolver.ViewModels.Wordlie;
+using WordlieSolver.Views;
 
 namespace WordlieSolver
 {
@@ -21,6 +23,8 @@ namespace WordlieSolver
         {
             base.ConfigureViewModelLocator();
             ViewModelLocationProvider.Register<MainWindow, MainWindowViewModel>();
+            ViewModelLocationProvider.Register<WordlieControl, WordlieViewModel>();
+            ViewModelLocationProvider.Register<WordsControl, WordsViewModel>();
         }
     }
 }

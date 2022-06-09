@@ -6,7 +6,6 @@ namespace WordlieSolver.ViewModels.Wordlie
 {
     public class LetterViewModel : BindableBase
     {
-        private bool _isActive;
         private char _character;
         private LetterState _state;
 
@@ -16,16 +15,16 @@ namespace WordlieSolver.ViewModels.Wordlie
                 .ObservesProperty(() => IsActive);
         }
 
-        public bool IsActive
-        {
-            get => _isActive;
-            set => SetProperty(ref _isActive, value);
-        }
+        public bool IsActive => Character != default;
 
         public char Character
         {
             get => _character;
-            set => SetProperty(ref _character, value);
+            set
+            {
+                if (SetProperty(ref _character, value))
+                    RaisePropertyChanged(nameof(IsActive));
+            }
         }
 
         public LetterState State

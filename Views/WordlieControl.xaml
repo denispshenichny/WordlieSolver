@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:WordlieSolver.ViewModels.Wordlie"
              xmlns:shared="clr-namespace:WordlieSolver.Shared"
-             mc:Ignorable="d" >
-    <UserControl.DataContext>
-        <viewModels:WordlieViewModel/>
-    </UserControl.DataContext>
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance viewModels:WordlieViewModel}">
     <Grid>
         <ItemsControl ItemsSource="{Binding Words}">
             <ItemsControl.ItemTemplate>

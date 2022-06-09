@@ -11,7 +11,7 @@ namespace WordlieSolver.ViewModels.Wordlie
         {
             var letters = new ObservableCollection<LetterViewModel>();
             for (int i = 0; i < 5; i++)
-                letters.Add(new LetterViewModel() { Character = 'A', IsActive = i % 2 == 0 });
+                letters.Add(new LetterViewModel());
 
             Letters = letters;
         }
@@ -21,12 +21,15 @@ namespace WordlieSolver.ViewModels.Wordlie
         public bool IsActive
         {
             get => _isActive;
-            set
-            {
-                if (SetProperty(ref _isActive, value))
-                    foreach (LetterViewModel letter in Letters)
-                        letter.IsActive = value;
-            }
+            private set => SetProperty(ref _isActive, value);
+        }
+
+        public void SetWord(string word)
+        {
+            for (int i = 0; i < word.Length; i++)
+                Letters[i].Character = word[i];
+
+            IsActive = true;
         }
     }
 }
