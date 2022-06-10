@@ -13,6 +13,7 @@ namespace WordlieSolver.ViewModels.Wordlie
         {
             _eventAggregator = eventAggregator;
             eventAggregator.GetEvent<WordSelectedEvent>().Subscribe(OnWordSelected);
+            eventAggregator.GetEvent<RestartEvent>().Subscribe(OnRestart);
             Words = new ObservableCollection<WordViewModel> { new(_eventAggregator) };
         }
 
@@ -21,6 +22,12 @@ namespace WordlieSolver.ViewModels.Wordlie
         private void OnWordSelected(string word)
         {
             Words[^1].SetWord(word);
+            Words.Add(new WordViewModel(_eventAggregator));
+        }
+
+        private void OnRestart()
+        {
+            Words.Clear();
             Words.Add(new WordViewModel(_eventAggregator));
         }
     }

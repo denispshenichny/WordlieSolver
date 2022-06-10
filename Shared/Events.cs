@@ -10,4 +10,8 @@ namespace WordlieSolver.Shared
     public class WordAppliedEvent : PubSubEvent<IEnumerable<ILetter>>
     {
     }
+
+    public class RestartEvent : PubSubEvent
+    {
+    }
 }

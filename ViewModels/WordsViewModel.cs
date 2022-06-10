@@ -20,6 +20,7 @@ namespace WordlieSolver.ViewModels
         public WordsViewModel(IEventAggregator eventAggregator)
         {
             eventAggregator.GetEvent<WordAppliedEvent>().Subscribe(OnWordApplied);
+            eventAggregator.GetEvent<RestartEvent>().Subscribe(OnRestart);
             _eventAggregator = eventAggregator;
             IEnumerable<string> words = FileReader.ReadAllLines("Resources.russian_nouns.txt")
                 .Where(w => w.Length == 5);
@@ -46,6 +47,7 @@ namespace WordlieSolver.ViewModels
         private void OnSelectWord(string word)
         {
             _eventAggregator.GetEvent<WordSelectedEvent>().Publish(word);
+            FilterString = string.Empty;
         }
 
         private bool WordsFilter(object obj)
@@ -68,6 +70,12 @@ namespace WordlieSolver.ViewModels
         private void OnWordApplied(IEnumerable<ILetter> word)
         {
             _maskCalculator.PushMask(word);
+            UpdateView();
+        }
+
+        private void OnRestart()
+        {
+            _maskCalculator.Reset();
             UpdateView();
         }
     }

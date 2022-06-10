@@ -13,5 +13,6 @@ namespace WordlieSolver.Shared
     {
         void PushMask(IEnumerable<ILetter> mask);
         bool IsWordFit(string word);
+        void Reset();
     }
 }

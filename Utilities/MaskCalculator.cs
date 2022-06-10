@@ -48,5 +48,12 @@ namespace WordlieSolver.Utilities
 
             return _wrongPlacedLetters.All(letter => word.Contains(letter.Character) && word[letter.Index] != letter.Character);
         }
+
+        public void Reset()
+        {
+            _missingLetters.Clear();
+            _guessedLetters.Clear();
+            _wrongPlacedLetters.Clear();
+        }
     }
 }
