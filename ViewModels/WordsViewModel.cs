@@ -16,6 +16,7 @@ namespace WordlieSolver.ViewModels
         private readonly IEventAggregator _eventAggregator;
         private readonly IMaskCalculator _maskCalculator = new MaskCalculator();
         private string _filterString = string.Empty;
+        private bool _isWordSelectable = true;
 
         public WordsViewModel(IEventAggregator eventAggregator)
         {
@@ -27,7 +28,8 @@ namespace WordlieSolver.ViewModels
             AvailableWords = CollectionViewSource.GetDefaultView(words);
             AvailableWords.Filter = WordsFilter;
 
-            SelectWordCommand = new DelegateCommand<string>(OnSelectWord);
+            SelectWordCommand = new DelegateCommand<string>(OnSelectWord, _ => IsWordSelectable)
+                .ObservesCanExecute(() => IsWordSelectable);
         }
 
         public string FilterString
@@ -39,7 +41,11 @@ namespace WordlieSolver.ViewModels
                     UpdateView();
             }
         }
-
+        public bool IsWordSelectable
+        {
+            get => _isWordSelectable;
+            set => SetProperty(ref _isWordSelectable, value);
+        }
         public ICollectionView AvailableWords { get; }
         public string WordsCount => $"Words fit: {AvailableWords.Cast<string>().Count()}";
         public ICommand SelectWordCommand { get; }
@@ -48,6 +54,7 @@ namespace WordlieSolver.ViewModels
         {
             _eventAggregator.GetEvent<WordSelectedEvent>().Publish(word);
             FilterString = string.Empty;
+            IsWordSelectable = false;
         }
 
         private bool WordsFilter(object obj)
@@ -71,12 +78,14 @@ namespace WordlieSolver.ViewModels
         {
             _maskCalculator.PushMask(word);
             UpdateView();
+            IsWordSelectable = true;
         }
 
         private void OnRestart()
         {
             _maskCalculator.Reset();
             UpdateView();
+            IsWordSelectable = true;
         }
     }
 }
