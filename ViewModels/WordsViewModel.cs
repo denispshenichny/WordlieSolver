@@ -52,7 +52,7 @@ namespace WordlieSolver.ViewModels
 
         private void OnSelectWord(string word)
         {
-            _eventAggregator.GetEvent<WordSelectedEvent>().Publish(word);
+            _eventAggregator.GetEvent<WordSelectedEvent>().Publish(_maskCalculator.GetLetters(word));
             FilterString = string.Empty;
             IsWordSelectable = false;
         }

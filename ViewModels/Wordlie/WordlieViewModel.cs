@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Prism.Events;
 using Prism.Mvvm;
 using WordlieSolver.Shared;
@@ -19,7 +20,7 @@ namespace WordlieSolver.ViewModels.Wordlie
 
         public ObservableCollection<WordViewModel> Words { get; }
 
-        private void OnWordSelected(string word)
+        private void OnWordSelected(ILetter[] word)
         {
             Words[^1].SetWord(word);
             Words.Add(new WordViewModel(_eventAggregator));

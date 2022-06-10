@@ -38,10 +38,13 @@ namespace WordlieSolver.ViewModels.Wordlie
         }
         public ICommand ReplyCommand { get; }
 
-        public void SetWord(string word)
+        public void SetWord(ILetter[] word)
         {
             for (int i = 0; i < word.Length; i++)
-                Letters[i].Character = word[i];
+            {
+                Letters[i].Character = word[i].Character;
+                Letters[i].State = word[i].State;
+            }
 
             IsActive = true;
         }

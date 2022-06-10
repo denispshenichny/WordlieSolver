@@ -19,6 +19,18 @@ namespace WordlieSolver.Utilities
             public int Index { get; }
         }
 
+        private class StatedLetter : ILetter
+        {
+            public StatedLetter(char character, LetterState state)
+            {
+                Character = character;
+                State = state;
+            }
+
+            public char Character { get; }
+            public LetterState State { get; }
+        }
+
         private readonly IList<char> _missingLetters = new List<char>();
         private readonly IList<IndexedLetter> _guessedLetters = new List<IndexedLetter>();
         private readonly IList<IndexedLetter> _wrongPlacedLetters = new List<IndexedLetter>();
@@ -49,11 +61,33 @@ namespace WordlieSolver.Utilities
             return _wrongPlacedLetters.All(letter => word.Contains(letter.Character) && word[letter.Index] != letter.Character);
         }
 
+        public ILetter[] GetLetters(string word)
+        {
+            var result = new ILetter[word.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+                char letter = word[i];
+                result[i] = new StatedLetter(letter, GetLetterState(letter));
+            }
+            return result;
+        }
+
         public void Reset()
         {
             _missingLetters.Clear();
             _guessedLetters.Clear();
             _wrongPlacedLetters.Clear();
+        }
+
+        private LetterState GetLetterState(char letter)
+        {
+            if (_guessedLetters.Any(l => l.Character == letter))
+                return LetterState.Guessed;
+
+            if (_wrongPlacedLetters.Any(l => l.Character == letter))
+                return LetterState.WrongPlace;
+
+            return LetterState.Missed;
         }
     }
 }
