@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewModels="clr-namespace:WordlieSolver.ViewModels.Wordlie"
              xmlns:shared="clr-namespace:WordlieSolver.Shared"
-             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:controls="clr-namespace:WordlieSolver.Controls"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance viewModels:WordlieViewModel}">
@@ -13,6 +14,16 @@
         <ItemsControl ItemsSource="{Binding Words}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="viewModels:WordViewModel">
+                    <DataTemplate.Resources>
+                        <Style TargetType="{x:Type controls:RoundedButton}">
+                            <Setter Property="Width" Value="60"/>
+                            <Setter Property="Height" Value="60"/>
+                            <Setter Property="CornerRadius" Value="30"/>
+                            <Setter Property="Margin" Value="2"/>
+                            <Setter Property="DisabledOpacity" Value="0.5"/>
+                            <Setter Property="HighlightedOpacity" Value="0.7"/>
+                        </Style>
+                    </DataTemplate.Resources>
                     <StackPanel Orientation="Horizontal">
                         <ItemsControl ItemsSource="{Binding Letters}">
                             <ItemsControl.ItemsPanel>
@@ -22,42 +33,25 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="viewModels:LetterViewModel">
-                                    <Button Command="{Binding SwitchStateCommand}" 
-                                        Background="{Binding State, Converter={shared:LetterStateToBackgroundColorConverter}}">
-                                        <Button.Resources>
-                                            <Style TargetType="Border">
-                                                <Setter Property="Width" Value="60"/>
-                                                <Setter Property="Height" Value="60"/>
-                                                <Setter Property="CornerRadius" Value="30"/>
-                                                <Setter Property="Margin" Value="2"/>
-                                            </Style>
-                                        </Button.Resources>
-
+                                    <controls:RoundedButton Command="{Binding SwitchStateCommand}"
+                                                            Background="{Binding State, Converter={shared:LetterStateToBackgroundColorConverter}}"
+                                                            VerticalContentAlignment="Top">
                                         <TextBlock Text="{Binding Character}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               FontSize="40"/>
-                                    </Button>
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="40"/>
+                                    </controls:RoundedButton>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
-                        <Button Command="{Binding ReplyCommand}" 
-                                Background="Transparent">
-                            <Button.Resources>
-                                <Style TargetType="Border">
-                                    <Setter Property="Width" Value="60"/>
-                                    <Setter Property="Height" Value="60"/>
-                                    <Setter Property="CornerRadius" Value="30"/>
-                                    <Setter Property="Margin" Value="2"/>
-                                </Style>
-                            </Button.Resources>
-
+                        <controls:RoundedButton Command="{Binding ReplyCommand}"
+                                                Background="ForestGreen">
                             <TextBlock Text="✓"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
                                        FontSize="40"/>
-                        </Button>
+                        </controls:RoundedButton>
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

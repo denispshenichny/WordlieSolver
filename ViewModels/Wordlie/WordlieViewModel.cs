@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Prism.Events;
 using Prism.Mvvm;
 using WordlieSolver.Shared;
