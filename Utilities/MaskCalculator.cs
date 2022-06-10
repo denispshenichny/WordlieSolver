@@ -49,7 +49,9 @@ namespace WordlieSolver.Utilities
             if (_missingLetters.Contains(letter))
                 _missingLetters.Remove(letter);
 
-            _guessedLetters[letter] = new HashSet<int> { index };
+            var forbiddenIndices = new HashSet<int>(Enumerable.Range(0, Constants.LettersCount));
+            forbiddenIndices.Remove(index);
+            _guessedLetters[letter] = forbiddenIndices;
         }
 
         private void PushWrongPlacedLetter(char letter, int index)
@@ -57,23 +59,21 @@ namespace WordlieSolver.Utilities
             if (_missingLetters.Contains(letter))
                 _missingLetters.Remove(letter);
 
-            HashSet<int> guessingLetter = GetGuessingLetter(letter);
-            guessingLetter.Remove(index);
+            HashSet<int> forbiddenIndices = GetForbiddenIndices(letter);
+            forbiddenIndices.Add(index);
             foreach ((char guessed, HashSet<int>? value) in _guessedLetters)
-            {
-                if (value.Count == 1 && letter != guessed)
-                    guessingLetter.Remove(value.ElementAt(0));
-            }
+                if (value.Count == Constants.LettersCount - 1 && letter != guessed)
+                    forbiddenIndices.Add(value.ElementAt(0));
 
-            _guessedLetters[letter] = guessingLetter;
+            _guessedLetters[letter] = forbiddenIndices;
         }
 
-        private HashSet<int> GetGuessingLetter(char letter)
+        private HashSet<int> GetForbiddenIndices(char letter)
         {
             if (_guessedLetters.TryGetValue(letter, out HashSet<int>? result))
                 return result;
 
-            return new HashSet<int>(Enumerable.Range(0, Constants.LettersCount));
+            return new HashSet<int>();
         }
 
         public bool IsWordFit(string word)
@@ -81,16 +81,9 @@ namespace WordlieSolver.Utilities
             if (_missingLetters.Any(word.Contains))
                 return false;
 
-            foreach (KeyValuePair<char, HashSet<int>> letter in _guessedLetters)
-            {
-                bool found = false;
-                foreach (int index in letter.Value)
-                    if (word[index] == letter.Key)
-                        found = true;
-
-                if (!found)
+            foreach ((char letter, HashSet<int>? forbiddenIndices) in _guessedLetters)
+                if (forbiddenIndices.Any(index => word[index] == letter) || !word.Contains(letter))
                     return false;
-            }
 
             return true;
         }
@@ -117,7 +110,7 @@ namespace WordlieSolver.Utilities
             if (!_guessedLetters.ContainsKey(letter))
                 return LetterState.Missed;
 
-            return _guessedLetters[letter].Count == 1 ? LetterState.Guessed : LetterState.WrongPlace;
+            return _guessedLetters[letter].Count == Constants.LettersCount - 1 ? LetterState.Guessed : LetterState.WrongPlace;
         }
     }
 }
