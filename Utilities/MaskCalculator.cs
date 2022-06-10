@@ -7,18 +7,6 @@ namespace WordlieSolver.Utilities
 {
     public class MaskCalculator : IMaskCalculator
     {
-        private readonly struct IndexedLetter
-        {
-            public IndexedLetter(char character, int index)
-            {
-                Character = character;
-                Index = index;
-            }
-
-            public char Character { get; }
-            public int Index { get; }
-        }
-
         private class StatedLetter : ILetter
         {
             public StatedLetter(char character, LetterState state)
@@ -31,9 +19,8 @@ namespace WordlieSolver.Utilities
             public LetterState State { get; }
         }
 
-        private readonly IList<char> _missingLetters = new List<char>();
-        private readonly IList<IndexedLetter> _guessedLetters = new List<IndexedLetter>();
-        private readonly IList<IndexedLetter> _wrongPlacedLetters = new List<IndexedLetter>();
+        private readonly HashSet<char> _missingLetters = new();
+        private readonly Dictionary<char, HashSet<int>> _guessedLetters = new();
 
         public void PushMask(IEnumerable<ILetter> word)
         {
@@ -42,12 +29,51 @@ namespace WordlieSolver.Utilities
             {
                 switch (letter.State)
                 {
-                    case LetterState.Missed: _missingLetters.Add(letter.Character); break;
-                    case LetterState.Guessed: _guessedLetters.Add(new IndexedLetter(letter.Character, i)); break;
-                    case LetterState.WrongPlace: _wrongPlacedLetters.Add(new IndexedLetter(letter.Character, i)); break;
+                    case LetterState.Missed: 
+                        if (!_guessedLetters.ContainsKey(letter.Character))
+                            _missingLetters.Add(letter.Character); 
+                        break;
+                    case LetterState.Guessed:
+                        PushGuessedLetter(letter.Character, i);
+                        break;
+                    case LetterState.WrongPlace:
+                        PushWrongPlacedLetter(letter.Character, i);
+                        break;
                 }
                 i++;
             }
+        }
+
+        private void PushGuessedLetter(char letter, int index)
+        {
+            if (_missingLetters.Contains(letter))
+                _missingLetters.Remove(letter);
+
+            _guessedLetters[letter] = new HashSet<int> { index };
+        }
+
+        private void PushWrongPlacedLetter(char letter, int index)
+        {
+            if (_missingLetters.Contains(letter))
+                _missingLetters.Remove(letter);
+
+            HashSet<int> guessingLetter = GetGuessingLetter(letter);
+            guessingLetter.Remove(index);
+            foreach ((char guessed, HashSet<int>? value) in _guessedLetters)
+            {
+                if (value.Count == 1 && letter != guessed)
+                    guessingLetter.Remove(value.ElementAt(0));
+            }
+
+            _guessedLetters[letter] = guessingLetter;
+        }
+
+        private HashSet<int> GetGuessingLetter(char letter)
+        {
+            if (_guessedLetters.TryGetValue(letter, out HashSet<int>? result))
+                return result;
+
+            return new HashSet<int>(Enumerable.Range(0, Constants.LettersCount));
         }
 
         public bool IsWordFit(string word)
@@ -55,10 +81,18 @@ namespace WordlieSolver.Utilities
             if (_missingLetters.Any(word.Contains))
                 return false;
 
-            if (_guessedLetters.Any(letter => word[letter.Index] != letter.Character))
-                return false;
+            foreach (KeyValuePair<char, HashSet<int>> letter in _guessedLetters)
+            {
+                bool found = false;
+                foreach (int index in letter.Value)
+                    if (word[index] == letter.Key)
+                        found = true;
 
-            return _wrongPlacedLetters.All(letter => word.Contains(letter.Character) && word[letter.Index] != letter.Character);
+                if (!found)
+                    return false;
+            }
+
+            return true;
         }
 
         public ILetter[] GetLetters(string word)
@@ -76,18 +110,14 @@ namespace WordlieSolver.Utilities
         {
             _missingLetters.Clear();
             _guessedLetters.Clear();
-            _wrongPlacedLetters.Clear();
         }
 
         private LetterState GetLetterState(char letter)
         {
-            if (_guessedLetters.Any(l => l.Character == letter))
-                return LetterState.Guessed;
+            if (!_guessedLetters.ContainsKey(letter))
+                return LetterState.Missed;
 
-            if (_wrongPlacedLetters.Any(l => l.Character == letter))
-                return LetterState.WrongPlace;
-
-            return LetterState.Missed;
+            return _guessedLetters[letter].Count == 1 ? LetterState.Guessed : LetterState.WrongPlace;
         }
     }
 }

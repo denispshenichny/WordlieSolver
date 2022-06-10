@@ -24,7 +24,7 @@ namespace WordlieSolver.ViewModels
             eventAggregator.GetEvent<RestartEvent>().Subscribe(OnRestart);
             _eventAggregator = eventAggregator;
             IEnumerable<string> words = FileReader.ReadAllLines("Resources.russian_nouns.txt")
-                .Where(w => w.Length == 5)
+                .Where(w => w.Length == Constants.LettersCount)
                 .Select(w => w.Replace('ё', 'е'));
             AvailableWords = CollectionViewSource.GetDefaultView(words);
             AvailableWords.Filter = WordsFilter;

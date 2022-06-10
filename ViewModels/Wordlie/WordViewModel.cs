@@ -16,7 +16,7 @@ namespace WordlieSolver.ViewModels.Wordlie
         {
             _eventAggregator = eventAggregator;
             var letters = new ObservableCollection<LetterViewModel>();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < Constants.LettersCount; i++)
                 letters.Add(new LetterViewModel());
 
             Letters = letters;
