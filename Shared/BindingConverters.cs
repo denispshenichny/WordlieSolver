@@ -21,8 +21,9 @@ namespace WordlieSolver.Shared
 
             switch (state)
             {
-                case LetterState.Missed: return Brushes.Gray;
-                case LetterState.WrongPlace: return Brushes.White;
+                case LetterState.None: return Brushes.Transparent;
+                case LetterState.Missed: return Brushes.White;
+                case LetterState.WrongPlace: return Brushes.LightGray;
                 case LetterState.Guessed: return Brushes.DarkOrange;
                 default: return null;
             }

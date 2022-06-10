@@ -2,6 +2,7 @@
 {
     public enum LetterState
     {
+        None,
         Missed,
         WrongPlace,
         Guessed
