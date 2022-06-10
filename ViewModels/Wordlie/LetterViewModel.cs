@@ -1,10 +1,11 @@
 ﻿using System.Windows.Input;
 using Prism.Commands;
 using Prism.Mvvm;
+using WordlieSolver.Shared;
 
 namespace WordlieSolver.ViewModels.Wordlie
 {
-    public class LetterViewModel : BindableBase
+    public class LetterViewModel : BindableBase, ILetter
     {
         private char _character;
         private LetterState _state;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace WordlieSolver.Shared
+namespace WordlieSolver.Utilities
 {
     public static class FileReader
     {

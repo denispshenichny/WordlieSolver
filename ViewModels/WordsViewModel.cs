@@ -7,16 +7,19 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using WordlieSolver.Shared;
+using WordlieSolver.Utilities;
 
 namespace WordlieSolver.ViewModels
 {
     public class WordsViewModel : BindableBase
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly IMaskCalculator _maskCalculator = new MaskCalculator();
         private string _filterString = string.Empty;
 
         public WordsViewModel(IEventAggregator eventAggregator)
         {
+            eventAggregator.GetEvent<WordAppliedEvent>().Subscribe(OnWordApplied);
             _eventAggregator = eventAggregator;
             IEnumerable<string> words = FileReader.ReadAllLines("Resources.russian_nouns.txt")
                 .Where(w => w.Length == 5);
@@ -32,12 +35,10 @@ namespace WordlieSolver.ViewModels
             set
             {
                 if (SetProperty(ref _filterString, value))
-                {
-                    AvailableWords.Refresh();
-                    RaisePropertyChanged(nameof(WordsCount));
-                }
+                    UpdateView();
             }
         }
+
         public ICollectionView AvailableWords { get; }
         public string WordsCount => $"Words fit: {AvailableWords.Cast<string>().Count()}";
         public ICommand SelectWordCommand { get; }
@@ -52,7 +53,22 @@ namespace WordlieSolver.ViewModels
             if (!(obj is string word))
                 return false;
 
+            if (!_maskCalculator.IsWordFit(word))
+                return false;
+
             return string.IsNullOrEmpty(word.Trim()) || word.Contains(FilterString);
+        }
+
+        private void UpdateView()
+        {
+            AvailableWords.Refresh();
+            RaisePropertyChanged(nameof(WordsCount));
+        }
+
+        private void OnWordApplied(IEnumerable<ILetter> word)
+        {
+            _maskCalculator.PushMask(word);
+            UpdateView();
         }
     }
 }

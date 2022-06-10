@@ -7,10 +7,13 @@ namespace WordlieSolver.ViewModels.Wordlie
 {
     public class WordlieViewModel : BindableBase
     {
+        private readonly IEventAggregator _eventAggregator;
+
         public WordlieViewModel(IEventAggregator eventAggregator)
         {
+            _eventAggregator = eventAggregator;
             eventAggregator.GetEvent<WordSelectedEvent>().Subscribe(OnWordSelected);
-            Words = new ObservableCollection<WordViewModel> { new() };
+            Words = new ObservableCollection<WordViewModel> { new(_eventAggregator) };
         }
 
         public ObservableCollection<WordViewModel> Words { get; }
@@ -18,7 +21,7 @@ namespace WordlieSolver.ViewModels.Wordlie
         private void OnWordSelected(string word)
         {
             Words[^1].SetWord(word);
-            Words.Add(new WordViewModel());
+            Words.Add(new WordViewModel(_eventAggregator));
         }
     }
 }
