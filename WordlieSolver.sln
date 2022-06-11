@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordlieSolver", "WordlieSolver.csproj", "{89011706-FC70-4E86-8CB4-61DF3BCA9C64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordlieSolver", "WordlieSolver\WordlieSolver.csproj", "{89011706-FC70-4E86-8CB4-61DF3BCA9C64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordlieSolver.Tests", "WordlieSolver.Tests\WordlieSolver.Tests.csproj", "{BBDBE19E-9366-4D74-B624-DA8C57104804}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{89011706-FC70-4E86-8CB4-61DF3BCA9C64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89011706-FC70-4E86-8CB4-61DF3BCA9C64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89011706-FC70-4E86-8CB4-61DF3BCA9C64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBDBE19E-9366-4D74-B624-DA8C57104804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBDBE19E-9366-4D74-B624-DA8C57104804}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBDBE19E-9366-4D74-B624-DA8C57104804}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBDBE19E-9366-4D74-B624-DA8C57104804}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
