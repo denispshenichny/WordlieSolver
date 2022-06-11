@@ -142,5 +142,47 @@ namespace WordlieSolver.Tests
             Assert.False(_maskCalculator.IsWordFit("копна"));
             Assert.True(_maskCalculator.IsWordFit("капча"));
         }
+
+        [Fact]
+        public void Bug1()
+        {
+            _maskCalculator.PushMask(new ILetter[]
+            {
+                new FakeLetter('п', LetterState.Missed),
+                new FakeLetter('и', LetterState.Missed),
+                new FakeLetter('р', LetterState.Missed),
+                new FakeLetter('а', LetterState.WrongPlace),
+                new FakeLetter('т', LetterState.Missed)
+            });
+
+            _maskCalculator.PushMask(new ILetter[]
+            {
+                new FakeLetter('м', LetterState.Missed),
+                new FakeLetter('а', LetterState.WrongPlace),
+                new FakeLetter('н', LetterState.Missed),
+                new FakeLetter('е', LetterState.WrongPlace),
+                new FakeLetter('ж', LetterState.Missed)
+            });
+
+            _maskCalculator.PushMask(new ILetter[]
+            {
+                new FakeLetter('б', LetterState.Missed),
+                new FakeLetter('е', LetterState.WrongPlace),
+                new FakeLetter('л', LetterState.Missed),
+                new FakeLetter('к', LetterState.Missed),
+                new FakeLetter('а', LetterState.Guessed)
+            });
+
+            _maskCalculator.PushMask(new ILetter[]
+            {
+                new FakeLetter('с', LetterState.Missed),
+                new FakeLetter('в', LetterState.Missed),
+                new FakeLetter('е', LetterState.WrongPlace),
+                new FakeLetter('ч', LetterState.Missed),
+                new FakeLetter('а', LetterState.Guessed)
+            });
+
+            Assert.True(_maskCalculator.IsWordFit("егоза"));
+        }
     }
 }
