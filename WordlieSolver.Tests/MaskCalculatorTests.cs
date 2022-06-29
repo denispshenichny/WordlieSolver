@@ -184,5 +184,38 @@ namespace WordlieSolver.Tests
 
             Assert.True(_maskCalculator.IsWordFit("егоза"));
         }
+
+        [Fact]
+        public void Bug_WrongForbiddenPlaces() //check if same to previous test
+        {
+            _maskCalculator.PushMask(new ILetter[]
+            {
+                new FakeLetter('п', LetterState.Missed),
+                new FakeLetter('и', LetterState.Missed),
+                new FakeLetter('р', LetterState.Missed),
+                new FakeLetter('а', LetterState.WrongPlace),
+                new FakeLetter('т', LetterState.Missed)
+            });
+
+            _maskCalculator.PushMask(new ILetter[]
+            {
+                new FakeLetter('н', LetterState.WrongPlace),
+                new FakeLetter('а', LetterState.WrongPlace),
+                new FakeLetter('к', LetterState.Missed),
+                new FakeLetter('о', LetterState.WrongPlace),
+                new FakeLetter('л', LetterState.Missed)
+            });
+
+            _maskCalculator.PushMask(new ILetter[]
+            {
+                new FakeLetter('ю', LetterState.Missed),
+                new FakeLetter('н', LetterState.Guessed),
+                new FakeLetter('о', LetterState.WrongPlace),
+                new FakeLetter('ш', LetterState.Missed),
+                new FakeLetter('а', LetterState.Guessed)
+            });
+
+            Assert.True(_maskCalculator.IsWordFit("онуча"));
+        }
     }
 }
